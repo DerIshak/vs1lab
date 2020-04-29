@@ -29,20 +29,24 @@ main{
   padding: 15px;
 }
 
-@media screen and (max-width: 1000px) {
-  [class*="col-"] {
-    float: none;
-    width: 100%;
-    padding: 15px;
-  }
+.taglist ul{
+  list-style-type:none;
 }
 
 .taglist li {
   background: #00B7FF;
   color: white;
-  padding: 3px;
-  margin: 3px;
+  padding: 5px;
+  margin: 5px;
   width: auto;
+}
+
+.taglist{
+  float: left;
+}
+
+.tagmap{
+  float: left;
 }
 
 
@@ -51,6 +55,11 @@ main{
 
 .tagging input{
   display: block;
+  padding: 5px;
+  margin: 5px;
+}
+
+.discovery input{
   padding: 5px;
   margin: 5px;
 }
