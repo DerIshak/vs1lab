@@ -50,9 +50,6 @@ main{
 }
 
 
-
-
-
 .tagging input{
   display: block;
   padding: 5px;
@@ -62,6 +59,10 @@ main{
 .discovery input{
   padding: 5px;
   margin: 5px;
+}
+
+.discovery form{
+  margin-bottom: 5px;
 }
 
 .col-1 {width: 8.33%;}
@@ -77,6 +78,11 @@ main{
 .col-11 {width: 91.66%;}
 .col-12 {width: 100%;}
 
+@media all and (max-width: 1000px) {
+  main{
+    flex-direction: column;
+  }
+}
 
 
 main::after {
@@ -87,5 +93,6 @@ main::after {
 
 footer{
   background: grey;
-  padding: 5px;
+  color: white;
+  padding: 10px;
 }
