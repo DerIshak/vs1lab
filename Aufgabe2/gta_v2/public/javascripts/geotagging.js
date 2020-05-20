@@ -96,7 +96,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
     var getLocationMapSrc = function(lat, lon, tags, zoom) {
         zoom = typeof zoom !== 'undefined' ? zoom : 10;
 
-        if (apiKey === "veAdrt5GM23qTweHVJukc5WXRGvHvlAA") {
+        if (apiKey === "YOUR_API_KEY_HERE") {
             console.log("No API key provided.");
             return "images/mapview.jpg";
         }
@@ -114,21 +114,24 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
     };
 
     return { // Start öffentlicher Teil des Moduls ...
-
         // Public Member
-
         readme: "Dieses Objekt enthält 'öffentliche' Teile des Moduls.",
         erfolg: function (position) {
-            console.log(getLatitude(position) + " " + getLongitude(position));
+
+            document.getElementById("latitude").value = getLatitude(position);
+            document.getElementById("longitude").value = getLongitude(position);
+            document.getElementById("latitude-dis").value = getLatitude(position);
+            document.getElementById("longitude-dis").value = getLongitude(position);
+
+            document.getElementById("result-img").src = getLocationMapSrc(document.getElementById("latitude-dis").value,document.getElementById("longitude-dis").value);
 
         },
+        fehler: function(msg){
+            alert(msg);
+        },
         updateLocation: function() {
-            // TODO Hier Inhalt der Funktion "update" ergänzen
-            tryLocate(navigator.geolocation.getCurrentPosition(this.erfolg),alert("Fehler"));
+            tryLocate(this.erfolg,this.fehler);
         }
-
-
-
 
 
     }; // ... Ende öffentlicher Teil
@@ -140,7 +143,8 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
  * des Skripts.
  */
 $(function() {
-    alert("Please change the script 'geotagging.js'");
+    //alert("Please change the script 'geotagging.js'");
     // TODO Hier den Aufruf für updateLocation einfügen
     gtaLocator.updateLocation();
+
 });
