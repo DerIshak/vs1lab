@@ -82,7 +82,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
     };
 
     // Hier Google Maps API Key eintragen
-    var apiKey = "YOUR_API_KEY_HERE";
+    var apiKey = "veAdrt5GM23qTweHVJukc5WXRGvHvlAA";
 
     /**
      * Funktion erzeugt eine URL, die auf die Karte verweist.
@@ -96,7 +96,7 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
     var getLocationMapSrc = function(lat, lon, tags, zoom) {
         zoom = typeof zoom !== 'undefined' ? zoom : 10;
 
-        if (apiKey === "YOUR_API_KEY_HERE") {
+        if (apiKey === "veAdrt5GM23qTweHVJukc5WXRGvHvlAA") {
             console.log("No API key provided.");
             return "images/mapview.jpg";
         }
@@ -118,10 +118,18 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
         // Public Member
 
         readme: "Dieses Objekt enthält 'öffentliche' Teile des Moduls.",
+        erfolg: function (position) {
+            console.log(getLatitude(position) + " " + getLongitude(position));
 
+        },
         updateLocation: function() {
             // TODO Hier Inhalt der Funktion "update" ergänzen
+            tryLocate(navigator.geolocation.getCurrentPosition(this.erfolg),alert("Fehler"));
         }
+
+
+
+
 
     }; // ... Ende öffentlicher Teil
 })(GEOLOCATIONAPI);
@@ -134,4 +142,5 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 $(function() {
     alert("Please change the script 'geotagging.js'");
     // TODO Hier den Aufruf für updateLocation einfügen
+    gtaLocator.updateLocation();
 });
