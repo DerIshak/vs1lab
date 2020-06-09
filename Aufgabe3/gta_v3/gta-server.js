@@ -30,6 +30,7 @@ app.set('view engine', 'ejs');
  */
 
 // TODO: CODE ERGÄNZEN
+app.use(express.static(__dirname + "/public"));
 
 /**
  * Konstruktor für GeoTag Objekte.
