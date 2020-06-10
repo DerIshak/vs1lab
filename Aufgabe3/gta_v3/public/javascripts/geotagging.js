@@ -130,7 +130,9 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
             alert(msg);
         },
         updateLocation: function() {
-            tryLocate(this.erfolg,this.fehler);
+            if(document.getElementById("latitude").value === "" && document.getElementById("longitude").value === ""){
+                tryLocate(this.erfolg,this.fehler);
+            }
         }
 
 
