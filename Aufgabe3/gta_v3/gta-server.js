@@ -40,8 +40,8 @@ app.use(express.static(__dirname + "/public"));
 // TODO: CODE ERGÄNZEN
 class GeoTag {
     constructor(lat, lon, name, tags) {
-        this.lat = lat;
-        this.lon = lon;
+        this.latitude = lat;
+        this.longitude = lon;
         this.name = name;
         this.tags = tags;
     }
@@ -57,40 +57,40 @@ class GeoTag {
  */
 
 // TODO: CODE ERGÄNZEN
-var geoTagMod = (function(){
+var geoTagMod = (function () {
     let geotags = [];
-    return{
-        searchGeoTagbyCoordinate:function (p_lat,p_lon,p_radius) {
+    return {
+        searchGeoTagbyCoordinate: function (p_lat, p_lon, p_radius) {
             let geotagresult = [];
-            for (i = 0; i < geotags.length; i++){
-                let x = Math.sqrt(Math.pow((geotags[i].lat - p_lat), 2)+Math.pow((geotags[i].lon - p_lon), 2));
-                if(x <= p_radius){
+            for (i = 0; i < geotags.length; i++) {
+                let x = Math.sqrt(Math.pow((geotags[i].latitude - p_lat), 2) + Math.pow((geotags[i].longitude - p_lon), 2));
+                if (x <= p_radius) {
                     geotagresult.push(geotags[i]);
                 }
             }
             return geotagresult;
         },
-        searchGeoTagByName:function (p_name) {
+        searchGeoTagByName: function (p_name) {
             let geotagresult = [];
-            for (i = 0; i < geotags.length; i++){
-                if(geotags[i].name.indexOf(p_name) >= 0){
+            for (i = 0; i < geotags.length; i++) {
+                if (geotags[i].name.indexOf(p_name) >= 0) {
                     geotagresult.push(geotags[i]);
                 }
             }
             return geotagresult;
         },
-        addGeoTag:function (p_lat, p_lon, p_name, p_tags) {
-            let newgeotag = new GeoTag(p_lat,p_lon,p_name,p_tags);
+        addGeoTag: function (p_lat, p_lon, p_name, p_tags) {
+            let newgeotag = new GeoTag(p_lat, p_lon, p_name, p_tags);
             geotags.push(newgeotag);
         },
-        deleteGeoTag:function (p_name) {
+        deleteGeoTag: function (p_name) {
             let pos;
-            for (i = 0; i < geotags.length; i++){
-                if(geotags[i].name === p_name){
+            for (i = 0; i < geotags.length; i++) {
+                if (geotags[i].name === p_name) {
                     pos = i;
                 }
             }
-            geotags.splice(pos,1);
+            geotags.splice(pos, 1);
         }
     }
 })();
@@ -142,10 +142,10 @@ var geoTagMod = (function(){
  * Als Response wird das ejs-Template ohne Geo Tag Objekte gerendert.
  */
 
-app.get('/', function(req, res) {
+app.get('/', function (req, res) {
     res.render('gta', {
-        longitude: undefined,
-        latitude: undefined,
+        r_longitude: undefined,
+        r_latitude: undefined,
         taglist: []
     });
 });
@@ -164,12 +164,12 @@ app.get('/', function(req, res) {
  */
 
 // TODO: CODE ERGÄNZEN START
-app.post('/tagging', function(req, res) {
-    geoTagMod.addGeoTag(req.body.latitude,req.body.longitude,req.body.name,req.body.hashtag);
+app.post('/tagging', function (req, res) {
+    geoTagMod.addGeoTag(req.body.latitude, req.body.longitude, req.body.name, req.body.hashtag);
     res.render('gta', {
-        longitude: req.body.longitude,
-        latitude: req.body.latitude,
-        taglist: geoTagMod.searchGeoTagbyCoordinate(req.body.latitude,req.body.longitude,0.1)
+        r_longitude: req.body.longitude,
+        r_latitude: req.body.latitude,
+        taglist: geoTagMod.searchGeoTagbyCoordinate(req.body.latitude, req.body.longitude, 0.4)
     });
 });
 
@@ -186,11 +186,11 @@ app.post('/tagging', function(req, res) {
  */
 
 // TODO: CODE ERGÄNZEN
-app.post('/discovery', function(req, res) {
+app.post('/discovery', function (req, res) {
     console.log(geoTagMod.searchGeoTagByName(req.body.searchterm));
     res.render('gta', {
-        longitude: req.body.longitude,
-        latitude: req.body.latitude,
+        r_longitude: req.body.longitude,
+        r_latitude: req.body.latitude,
         taglist: geoTagMod.searchGeoTagByName(req.body.searchterm)
     });
 

@@ -30,11 +30,11 @@
             <fieldset>
                 <legend>Enter new GeoTag</legend>
                 <label for="latitude">latitude</label>
-                <input type="text" id="latitude" name="latitude" placeholder="49.01379" <% if( latitude!== undefined)%> value="<%= latitude %>" required>
+                <input type="text" id="latitude" name="latitude" placeholder="49.01379" <% if( r_latitude!== undefined)%> value="<%= r_latitude %>" required>
 
 
                 <label for="longitude">longitude</label>
-                <input type="text" id="longitude" name="longitude" placeholder="8.390071" <% if( longitude!== undefined)%> value="<%= longitude %>" required>
+                <input type="text" id="longitude" name="longitude" placeholder="8.390071" <% if( r_longitude!== undefined)%> value="<%= r_longitude %>" required>
 
                 <label for="name">name</label>
                 <input type="text" id="name" name="name" placeholder="some name" maxlength="10"
@@ -76,13 +76,15 @@
         <div class="taglist">
             <ul id="results">
                 <% if (taglist !== undefined) taglist.forEach(function(gtag) { %>
-                    <li><%= gtag.name %> ( <%= gtag.lat %>,<%= gtag.lon %>) <%= gtag.tags %> </li>
+                    <li><%= gtag.name %> ( <%= gtag.latitude %>,<%= gtag.longitude %>) <%= gtag.tags %></li>
                 <% }); %>
             </ul>
         </div>
 
         <div class="tagmap">
-            <img id="result-img" src="./images/mapview.jpg" alt="a map with locations"/>
+            <img id="result-img" src="./images/mapview.jpg" alt="a map with locations"
+                    <% if(taglist !== undefined) %>
+                 data-tags="<%= JSON.stringify(taglist) %>"/>
             <div class="caption">Result map</div>
         </div>
 
