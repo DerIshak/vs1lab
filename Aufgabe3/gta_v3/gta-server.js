@@ -95,43 +95,7 @@ var geoTagMod = (function () {
     }
 })();
 
-//let geotags = [];
 
-// function searchGeoTagbyCoordinate(p_lat,p_lon,p_radius){
-//     let geotagresult = [];
-//     for (i = 0; i < geotags.length; i++){
-//         let x = Math.sqrt(Math.pow((geotags[i].lat - p_lat), 2)+Math.pow((geotags[i].lon - p_lon), 2));
-//         if(x <= p_radius){
-//             geotagresult.push(geotags[i]);
-//         }
-//     }
-//     return geotagresult;
-// }
-
-// function searchGeoTagByName(p_name){
-//     let geotagresult = [];
-//     for (i = 0; i < geotags.length; i++){
-//         if(geotags[i].name.indexOf(p_name) >= 0){
-//             geotagresult.push(geotags[i]);
-//         }
-//     }
-//     return geotagresult;
-// }
-
-// function addGeoTag(p_lat, p_lon, p_name, p_tags){
-//     let newgeotag = new GeoTag(p_lat,p_lon,p_name,p_tags);
-//     geotags.push(newgeotag);
-// }
-
-// function deleteGeoTag(p_name){
-//     let pos;
-//     for (i = 0; i < geotags.length; i++){
-//         if(geotags[i].name === p_name){
-//             pos = i;
-//         }
-//     }
-//     geotags.splice(pos,1);
-// }
 
 /**
  * Route mit Pfad '/' für HTTP 'GET' Requests.
