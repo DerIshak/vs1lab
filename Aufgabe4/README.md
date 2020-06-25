@@ -68,7 +68,7 @@ entsprechende Folien). Verwenden Sie kein JQuery.
   *HTTP POST* in *JSON Format* an den Server senden.
   - Tipp 1: Sie können hier den serverseitigen *GeoTag Konstruktor* aus Aufgabe 3
     im Client Skript wiederverwenden.
-  - Tipp 2: spezifizieren sie einen geeignezen *MIME-Type* für JSON im
+  - Tipp 2: spezifizieren sie einen geeigneten *MIME-Type* für JSON im
     HTTP-Header `Content-Type`, damit der Server den Inhalt erkennt.
 - Für das **Filterformular** soll der Aufruf auch *asynchron* ablaufen aber per *HTTP
   GET* mit *Query Parametern* erfolgen.
