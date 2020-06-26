@@ -113,6 +113,8 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
         return urlString;
     };
 
+
+
     return { // Start öffentlicher Teil des Moduls ...
         // Public Member
         readme: "Dieses Objekt enthält 'öffentliche' Teile des Moduls.",
@@ -143,6 +145,8 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
         }
 
 
+
+
     }; // ... Ende öffentlicher Teil
 })(GEOLOCATIONAPI);
 
@@ -161,6 +165,15 @@ class GeoTag {
     }
 }
 
+function listGenerator(value){
+    console.log(value);
+    var listElement = document.createElement("li");
+    var inhalt = JSON.parse(value);
+    var listInhalt = document.createTextNode(inhalt.name + " ( " + inhalt.latitude + " , " + inhalt.longitude + ") " + inhalt.tags);
+    listElement.appendChild(listInhalt);
+    document.getElementById("results").appendChild("listElement");
+}
+
 $(document).ready(function () {
     gtaLocator.updateLocation();
     //console.log(document.getElementById("result-img").dataset.tags);
@@ -169,10 +182,20 @@ $(document).ready(function () {
         var ajax = new XMLHttpRequest();
         var gtag = new GeoTag(document.getElementById("latitude").value,document.getElementById("longitude").value,
             document.getElementById("name").value,document.getElementById("hashtag").value);
+
+
+        ajax.onreadystatechange = function() {
+            if(ajax.readyState == 4){
+                var antwort = JSON.parse(ajax.responseText);
+
+                //console.log(antwort[0]);
+                antwort.forEach(listGenerator());
+
+            }
+        }
         ajax.open("POST","/tagging",true);
-        //ajax.overrideMimeType("application/json");
-        ajax.setRequestHeader("Content-type", "application/json");
-        console.log(JSON.stringify(gtag));
+        ajax.setRequestHeader("Content-Type", "application/json");
+        //console.log(JSON.stringify(gtag));
         ajax.send(JSON.stringify(gtag));
 
 
@@ -180,7 +203,9 @@ $(document).ready(function () {
     document.getElementById("filtersubmit").addEventListener("click", function (event) {
         event.preventDefault();
         var ajax = new XMLHttpRequest();
+
         ajax.open("GET","/discovery?searchterm=" + document.getElementById("searchterm").value,true);
+        ajax.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
         ajax.send();
     } );
 });
