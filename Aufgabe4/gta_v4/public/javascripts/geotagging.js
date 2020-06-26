@@ -165,13 +165,33 @@ class GeoTag {
     }
 }
 
-function listGenerator(value){
+/*function listGenerator(value){
     console.log(value);
     var listElement = document.createElement("li");
     var inhalt = JSON.parse(value);
     var listInhalt = document.createTextNode(inhalt.name + " ( " + inhalt.latitude + " , " + inhalt.longitude + ") " + inhalt.tags);
     listElement.appendChild(listInhalt);
     document.getElementById("results").appendChild("listElement");
+}*/
+
+
+function updateSite(resText){
+    var antwort = JSON.parse(resText);
+    var i = antwort.length - 1;
+    var ulElement = document.getElementById("results");
+    var listElement = document.createElement("li");
+    var strInhalt = antwort[i].name + " ( " + antwort[i].latitude + " , " + antwort[i].longitude + ") " + antwort[i].tags;
+
+
+    if (antwort[i].tags === undefined) strInhalt = antwort[i].name + " ( " + antwort[i].latitude + " , " + antwort[i].longitude + ") ";
+
+    var listInhalt = document.createTextNode(strInhalt);
+
+    listElement.appendChild(listInhalt);
+    ulElement.appendChild(listElement);
+
+    document.getElementById("result-img").setAttribute("data-tags",resText);
+    gtaLocator.updateLocation();
 }
 
 $(document).ready(function () {
@@ -185,11 +205,8 @@ $(document).ready(function () {
 
 
         ajax.onreadystatechange = function() {
-            if(ajax.readyState == 4){
-                var antwort = JSON.parse(ajax.responseText);
-
-                //console.log(antwort[0]);
-                antwort.forEach(listGenerator());
+            if(ajax.readyState === 4){
+                updateSite(ajax.responseText);
 
             }
         }

@@ -131,23 +131,10 @@ app.get('/', function (req, res) {
 
 app.post('/tagging', function (req, res) {
     geoTagMod.addGeoTag(req.body.latitude, req.body.longitude, req.body.name, req.body.hashtag);
-    /*res.render('gta', {
-        r_longitude: req.body.longitude,
-        r_latitude: req.body.latitude,
-        taglist: geoTagMod.searchGeoTagbyCoordinate(req.body.latitude, req.body.longitude, 0.4)
-    });*/
     res.send(geoTagMod.searchGeoTagbyCoordinate(req.body.latitude, req.body.longitude, 0.4));
 });
 
-/*app.post('/tagging', function (req, res) {
-    var reqjson = JSON.parse(req.body);
-    geoTagMod.addGeoTag(reqjson.latitude, reqjson.longitude, reqjson.name, reqjson.hashtag);
-    res.render('gta', {
-        r_longitude: reqjson.longitude,
-        r_latitude: reqjson.latitude,
-        taglist: geoTagMod.searchGeoTagbyCoordinate(reqjson.latitude, reqjson.longitude, 0.4)
-    });
-});*/
+
 /**
  * Route mit Pfad '/discovery' für HTTP 'POST' Requests.
  * (http://expressjs.com/de/4x/api.html#app.post.method)
@@ -160,7 +147,6 @@ app.post('/tagging', function (req, res) {
  * Falls 'term' vorhanden ist, wird nach Suchwort gefiltert.
  */
 
-// TODO: CODE ERGÄNZEN
 app.get('/discovery', function (req, res) {
     console.log(geoTagMod.searchGeoTagByName(req.body));
     console.log(req.body.searchterm);
