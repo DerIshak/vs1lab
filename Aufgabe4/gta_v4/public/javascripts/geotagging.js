@@ -177,18 +177,21 @@ class GeoTag {
 
 function updateSite(resText){
     var antwort = JSON.parse(resText);
-    var i = antwort.length - 1;
-    var ulElement = document.getElementById("results");
-    var listElement = document.createElement("li");
-    var strInhalt = antwort[i].name + " ( " + antwort[i].latitude + " , " + antwort[i].longitude + ") " + antwort[i].tags;
+    document.getElementById("results").innerHTML = "";
+    for(var i = 0;i<antwort.length;i++){
+        var ulElement = document.getElementById("results");
+        var listElement = document.createElement("li");
+        var strInhalt = antwort[i].name + " ( " + antwort[i].latitude + " , " + antwort[i].longitude + ") " + antwort[i].tags;
 
 
-    if (antwort[i].tags === undefined) strInhalt = antwort[i].name + " ( " + antwort[i].latitude + " , " + antwort[i].longitude + ") ";
+        if (antwort[i].tags === undefined) strInhalt = antwort[i].name + " ( " + antwort[i].latitude + " , " + antwort[i].longitude + ") ";
 
-    var listInhalt = document.createTextNode(strInhalt);
+        var listInhalt = document.createTextNode(strInhalt);
 
-    listElement.appendChild(listInhalt);
-    ulElement.appendChild(listElement);
+        listElement.appendChild(listInhalt);
+        ulElement.appendChild(listElement);
+    }
+
 
     document.getElementById("result-img").setAttribute("data-tags",resText);
     gtaLocator.updateLocation();
@@ -202,27 +205,23 @@ $(document).ready(function () {
         var ajax = new XMLHttpRequest();
         var gtag = new GeoTag(document.getElementById("latitude").value,document.getElementById("longitude").value,
             document.getElementById("name").value,document.getElementById("hashtag").value);
-
-
         ajax.onreadystatechange = function() {
             if(ajax.readyState === 4){
                 updateSite(ajax.responseText);
-
             }
         }
         ajax.open("POST","/tagging",true);
         ajax.setRequestHeader("Content-Type", "application/json");
         //console.log(JSON.stringify(gtag));
         ajax.send(JSON.stringify(gtag));
-
-
     } );
+
     document.getElementById("filtersubmit").addEventListener("click", function (event) {
         event.preventDefault();
         var ajax = new XMLHttpRequest();
 
         ajax.open("GET","/discovery?searchterm=" + document.getElementById("searchterm").value,true);
-        ajax.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+        ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         ajax.send();
     } );
 });

@@ -17,11 +17,8 @@ var express = require('express');
 var app;
 app = express();
 app.use(logger('dev'));
-app.use(bodyParser.urlencoded({
-    extended: false
-}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
-
 // Setze ejs als View Engine
 app.set('view engine', 'ejs');
 
@@ -130,6 +127,7 @@ app.get('/', function (req, res) {
 
 
 app.post('/tagging', function (req, res) {
+    console.log(req.body);
     geoTagMod.addGeoTag(req.body.latitude, req.body.longitude, req.body.name, req.body.hashtag);
     res.send(geoTagMod.searchGeoTagbyCoordinate(req.body.latitude, req.body.longitude, 0.4));
 });
@@ -148,8 +146,8 @@ app.post('/tagging', function (req, res) {
  */
 
 app.get('/discovery', function (req, res) {
-    console.log(geoTagMod.searchGeoTagByName(req.body));
-    console.log(req.body.searchterm);
+    //console.log(geoTagMod.searchGeoTagByName(req.body));
+    console.log(req.body);
     res.render('gta', {
         r_longitude: req.body.longitude,
         r_latitude: req.body.latitude,
