@@ -22,7 +22,6 @@ app.use(express.json());
 // Setze ejs als View Engine
 app.set('view engine', 'ejs');
 
-var router = express.Router();
 var standardRadius = 0.4;
 
 /**
@@ -223,12 +222,12 @@ app.post("/geotags", function (req, res) {
  */
 
 //Search by Name
-router.get("geotags/search/:query", function (req, res) {
+app.get("geotags/search/:query", function (req, res) {
     res.json(geoTagMod.searchGeoTagByName(req.params.query));
 });
 
 //Search by Coordinate
-router.get("geotags/search/:lat/:long/:radius", function (req, res) {
+app.get("geotags/search/:lat/:long/:radius", function (req, res) {
     if (req.params.radius) {
         res.json(geoTagMod.searchGeoTagbyCoordinate(
             parseFloat(req.params.lat),
@@ -247,7 +246,7 @@ router.get("geotags/search/:lat/:long/:radius", function (req, res) {
 /**
  * Lösche GeoTag
  */
-router.delete("geotags/:id", function (req, res) {
+app.delete("geotags/:id", function (req, res) {
     geoTagMod.deleteGeoTag(req.params.id);
     res.status(204).send();
 });
@@ -255,7 +254,7 @@ router.delete("geotags/:id", function (req, res) {
 /**
  * Ändere GeoTag
  */
-router.put("geotags/:id", function (req, res) {
+app.put("geotags/:id", function (req, res) {
     try {
         var newTag = new GeoTag(
             req.body.name,
