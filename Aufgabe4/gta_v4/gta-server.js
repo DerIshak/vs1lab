@@ -17,7 +17,7 @@ var express = require('express');
 var app;
 app = express();
 app.use(logger('dev'));
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.json());
 // Setze ejs als View Engine
 app.set('view engine', 'ejs');
@@ -84,35 +84,35 @@ var geoTagMod = (function () {
             geotags.push(newgeotag);
         },
         deleteGeoTag: function (id) {
-             geotags = geotags.filter(t => t.id != id);
-/*            let pos;
-            for (i = 0; i < geotags.length; i++) {
-                if (geotags[i].name === p_name) {
-                    pos = i;
-                }
-            }
-            geotags.splice(pos, 1);*/
+            geotags = geotags.filter(t => t.id != id);
+            /*            let pos;
+                        for (i = 0; i < geotags.length; i++) {
+                            if (geotags[i].name === p_name) {
+                                pos = i;
+                            }
+                        }
+                        geotags.splice(pos, 1);*/
         },
 
 
-        getTags: function(){
+        getTags: function () {
             return geotags;
         },
 
-        getTagById: function(id){
+        getTagById: function (id) {
             return geotags.filter(t => t.id === id)[0];
         },
 
         updateGeoTag: function (id, newTag) {
-           var tag = geotags.filter(t => t.id === id)[0];
-           if(tag){
-               geotags = geotags.filter(t => t.id != id)[0];
-               newTag.id = id;
-               geotags.push(newTag)
-               return newTag;
-           }else{
-               throw new Error("Keine passendes GeoTag gefunden");
-           }
+            var tag = geotags.filter(t => t.id === id)[0];
+            if (tag) {
+                geotags = geotags.filter(t => t.id != id)[0];
+                newTag.id = id;
+                geotags.push(newTag)
+                return newTag;
+            } else {
+                throw new Error("Keine passendes GeoTag gefunden");
+            }
         }
     }
 })();
@@ -178,7 +178,7 @@ app.get('/discovery', function (req, res) {
 /**
  * Return alle GeoTags
  */
-app.get("/geotags", function(req, res){
+app.get("/geotags", function (req, res) {
     //res.send("Test");
     res.json(geoTagMod.getTags());
 });
@@ -187,13 +187,13 @@ app.get("/geotags", function(req, res){
  * Return GeoTag nach ID
  */
 app.get("/geotags/:id", function (req, res) {
-   var ret = geoTagMod.getTagById(req.params.id);
+    var ret = geoTagMod.getTagById(req.params.id);
 
-    if(ret){
+    if (ret) {
         res.json(ret);
         res.status(200).send();
-    }else{
-        res.status(404).json({ ERROR: "Es gibt kein Element mit dieser ID"});
+    } else {
+        res.status(404).json({ERROR: "Es gibt kein Element mit dieser ID"});
     }
 });
 
@@ -202,13 +202,11 @@ app.get("/geotags/:id", function (req, res) {
  */
 app.post("/geotags", function (req, res) {
     try {
-        var newTag = new GeoTag(
+        res.status(201).json(geoTagMod.addGeoTag(
             req.body.latitude,
             req.body.longitude,
             req.body.name,
-            req.body.hashtag
-        );
-        res.status(201).json(geoTagMod.addGeoTag(newTag));
+            req.body.tags));
     } catch (e) {
         res.status(400).json({error: e.message});
     }
@@ -219,19 +217,19 @@ app.post("/geotags", function (req, res) {
  */
 
 //Search by Name
-router.get("geotags/search/:query", function(req, res){
-   res.json(geoTagMod.searchGeoTagByName(req.params.query));
+router.get("geotags/search/:query", function (req, res) {
+    res.json(geoTagMod.searchGeoTagByName(req.params.query));
 });
 
 //Search by Coordinate
-router.get("geotags/search/:lat/:long/:radius", function(req, res){
-    if(req.params.radius){
+router.get("geotags/search/:lat/:long/:radius", function (req, res) {
+    if (req.params.radius) {
         res.json(geoTagMod.searchGeoTagbyCoordinate(
             parseFloat(req.params.lat),
             parseFloat(req.params.long),
             parseFloat(req.params.radius)
         ));
-    }else{
+    } else {
         res.json(geoTagMod.searchGeoTagbyCoordinate(
             parseFloat(req.params.lat),
             parseFloat(req.params.long),
@@ -243,15 +241,15 @@ router.get("geotags/search/:lat/:long/:radius", function(req, res){
 /**
  * Lösche GeoTag
  */
-router.delete("geotags/:id", function(req, res){
-   geoTagMod.deleteGeoTag(req.params.id);
-   res.status(204).send();
+router.delete("geotags/:id", function (req, res) {
+    geoTagMod.deleteGeoTag(req.params.id);
+    res.status(204).send();
 });
 
 /**
  * Ändere GeoTag
  */
-router.put("geotags/:id", function(req, res){
+router.put("geotags/:id", function (req, res) {
     try {
         var newTag = new GeoTag(
             req.body.name,
@@ -260,7 +258,7 @@ router.put("geotags/:id", function(req, res){
             red.body.hashtag
         );
         res.status(200).json(geoTagMod.updateGeoTag(req.params.id, newTag));
-    }catch (e) {
+    } catch (e) {
         res.status(400).json({error: e.message});
     }
 

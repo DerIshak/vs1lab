@@ -182,9 +182,9 @@ function updateSite(resText){
         listElement.appendChild(listInhalt);
         ulElement.appendChild(listElement);
     }
-
-
     document.getElementById("result-img").setAttribute("data-tags",resText);
+    document.getElementById("latitude").value = antwort[0].latitude;
+    document.getElementById("longitude").value = antwort[0].longitude;
     gtaLocator.updateLocation();
 }
 
