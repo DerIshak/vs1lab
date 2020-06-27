@@ -38,8 +38,8 @@ app.use(express.static(__dirname + "/public"));
  */
 
 class GeoTag {
-    constructor(lat, lon, name, tags) {
-        this.id;
+    constructor(lat, lon, name, tags,id) {
+        this.id=id;
         this.latitude = lat;
         this.longitude = lon;
         this.name = name;
@@ -80,11 +80,12 @@ var geoTagMod = (function () {
             return geotagresult;
         },
         addGeoTag: function (p_lat, p_lon, p_name, p_tags) {
-            let newgeotag = new GeoTag(p_lat, p_lon, p_name, p_tags);
+            let newgeotag = new GeoTag(p_lat, p_lon, p_name, p_tags,id++);
             geotags.push(newgeotag);
         },
         deleteGeoTag: function (id) {
             geotags = geotags.filter(t => t.id != id);
+
             /*            let pos;
                         for (i = 0; i < geotags.length; i++) {
                             if (geotags[i].name === p_name) {
@@ -100,13 +101,13 @@ var geoTagMod = (function () {
         },
 
         getTagById: function (id) {
-            return geotags.filter(t => t.id === id)[0];
+            return geotags.filter(t => t.id == id);
         },
 
         updateGeoTag: function (id, newTag) {
             var tag = geotags.filter(t => t.id === id)[0];
             if (tag) {
-                geotags = geotags.filter(t => t.id != id)[0];
+                geotags = geotags.filter(t => t.id !== id)[0];
                 newTag.id = id;
                 geotags.push(newTag)
                 return newTag;
@@ -187,14 +188,19 @@ app.get("/geotags", function (req, res) {
  * Return GeoTag nach ID
  */
 app.get("/geotags/:id", function (req, res) {
+    console.log(parseInt(req.params.id));
     var ret = geoTagMod.getTagById(req.params.id);
 
-    if (ret) {
+    if (ret.length > 0) {
         res.json(ret);
         res.status(200).send();
     } else {
         res.status(404).json({ERROR: "Es gibt kein Element mit dieser ID"});
     }
+});
+
+app.get("/test/:id", function (req, res) {
+    res.send(req.params.id);
 });
 
 /**

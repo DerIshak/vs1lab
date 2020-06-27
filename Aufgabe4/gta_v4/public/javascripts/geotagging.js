@@ -158,7 +158,6 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 
 class GeoTag {
     constructor(lat, lon, name, tags) {
-        this.id;
         this.latitude = lat;
         this.longitude = lon;
         this.name = name;
