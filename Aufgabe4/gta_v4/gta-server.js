@@ -22,12 +22,14 @@ app.use(express.json());
 // Setze ejs als View Engine
 app.set('view engine', 'ejs');
 
+var router = express.Router();
+var standardRadius = 0.4;
+
 /**
  * Konfiguriere den Pfad für statische Dateien.
  * Teste das Ergebnis im Browser unter 'http://localhost:3000/'.
  */
 
-// TODO: CODE ERGÄNZEN
 app.use(express.static(__dirname + "/public"));
 
 /**
@@ -35,9 +37,9 @@ app.use(express.static(__dirname + "/public"));
  * GeoTag Objekte sollen min. alle Felder des 'tag-form' Formulars aufnehmen.
  */
 
-// TODO: CODE ERGÄNZEN
 class GeoTag {
     constructor(lat, lon, name, tags) {
+        this.id;
         this.latitude = lat;
         this.longitude = lon;
         this.name = name;
@@ -54,9 +56,9 @@ class GeoTag {
  * - Funktion zum Löschen eines Geo Tags. ok
  */
 
-// TODO: CODE ERGÄNZEN
 var geoTagMod = (function () {
     let geotags = [];
+    var id = 0;
     return {
         searchGeoTagbyCoordinate: function (p_lat, p_lon, p_radius) {
             let geotagresult = [];
@@ -81,18 +83,39 @@ var geoTagMod = (function () {
             let newgeotag = new GeoTag(p_lat, p_lon, p_name, p_tags);
             geotags.push(newgeotag);
         },
-        deleteGeoTag: function (p_name) {
-            let pos;
+        deleteGeoTag: function (id) {
+             geotags = geotags.filter(t => t.id != id);
+/*            let pos;
             for (i = 0; i < geotags.length; i++) {
                 if (geotags[i].name === p_name) {
                     pos = i;
                 }
             }
-            geotags.splice(pos, 1);
+            geotags.splice(pos, 1);*/
+        },
+
+
+        getTags: function(){
+            return geotags;
+        },
+
+        getTagById: function(id){
+            return geotags.filter(t => t.id === id)[0];
+        },
+
+        updateGeoTag: function (id, newTag) {
+           var tag = geotags.filter(t => t.id === id)[0];
+           if(tag){
+               geotags = geotags.filter(t => t.id != id)[0];
+               newTag.id = id;
+               geotags.push(newTag)
+               return newTag;
+           }else{
+               throw new Error("Keine passendes GeoTag gefunden");
+           }
         }
     }
 })();
-
 
 
 /**
@@ -147,6 +170,100 @@ app.post('/tagging', function (req, res) {
 
 app.get('/discovery', function (req, res) {
     res.send(geoTagMod.searchGeoTagByName(req.query.searchterm));
+});
+
+
+//-----------------------------------------------------------------------------
+
+/**
+ * Return alle GeoTags
+ */
+app.get("/geotags", function(req, res){
+    //res.send("Test");
+    res.json(geoTagMod.getTags());
+});
+
+/**
+ * Return GeoTag nach ID
+ */
+app.get("/geotags/:id", function (req, res) {
+   var ret = geoTagMod.getTagById(req.params.id);
+
+    if(ret){
+        res.json(ret);
+        res.status(200).send();
+    }else{
+        res.status(404).json({ ERROR: "Es gibt kein Element mit dieser ID"});
+    }
+});
+
+/**
+ *  Erstelle neuen GeoTag
+ */
+app.post("/geotags", function (req, res) {
+    try {
+        var newTag = new GeoTag(
+            req.body.latitude,
+            req.body.longitude,
+            req.body.name,
+            req.body.hashtag
+        );
+        res.status(201).json(geoTagMod.addGeoTag(newTag));
+    } catch (e) {
+        res.status(400).json({error: e.message});
+    }
+});
+
+/**
+ *  Suche nach GeoTags
+ */
+
+//Search by Name
+router.get("geotags/search/:query", function(req, res){
+   res.json(geoTagMod.searchGeoTagByName(req.params.query));
+});
+
+//Search by Coordinate
+router.get("geotags/search/:lat/:long/:radius", function(req, res){
+    if(req.params.radius){
+        res.json(geoTagMod.searchGeoTagbyCoordinate(
+            parseFloat(req.params.lat),
+            parseFloat(req.params.long),
+            parseFloat(req.params.radius)
+        ));
+    }else{
+        res.json(geoTagMod.searchGeoTagbyCoordinate(
+            parseFloat(req.params.lat),
+            parseFloat(req.params.long),
+            standardRadius
+        ));
+    }
+
+});
+/**
+ * Lösche GeoTag
+ */
+router.delete("geotags/:id", function(req, res){
+   geoTagMod.deleteGeoTag(req.params.id);
+   res.status(204).send();
+});
+
+/**
+ * Ändere GeoTag
+ */
+router.put("geotags/:id", function(req, res){
+    try {
+        var newTag = new GeoTag(
+            req.body.name,
+            req.body.latitude,
+            req.body.longitude,
+            red.body.hashtag
+        );
+        res.status(200).json(geoTagMod.updateGeoTag(req.params.id, newTag));
+    }catch (e) {
+        res.status(400).json({error: e.message});
+    }
+
 });
 
 

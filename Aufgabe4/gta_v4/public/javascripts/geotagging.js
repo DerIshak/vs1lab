@@ -158,22 +158,13 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
 
 class GeoTag {
     constructor(lat, lon, name, tags) {
+        this.id;
         this.latitude = lat;
         this.longitude = lon;
         this.name = name;
         this.hashtag = tags;
     }
 }
-
-/*function listGenerator(value){
-    console.log(value);
-    var listElement = document.createElement("li");
-    var inhalt = JSON.parse(value);
-    var listInhalt = document.createTextNode(inhalt.name + " ( " + inhalt.latitude + " , " + inhalt.longitude + ") " + inhalt.tags);
-    listElement.appendChild(listInhalt);
-    document.getElementById("results").appendChild("listElement");
-}*/
-
 
 function updateSite(resText){
     var antwort = JSON.parse(resText);
