@@ -161,7 +161,7 @@ class GeoTag {
         this.latitude = lat;
         this.longitude = lon;
         this.name = name;
-        this.tags = tags;
+        this.hashtag = tags;
     }
 }
 
@@ -221,7 +221,7 @@ $(document).ready(function () {
         var ajax = new XMLHttpRequest();
 
         ajax.open("GET","/discovery?searchterm=" + document.getElementById("searchterm").value,true);
-        ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    //    ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         ajax.send();
     } );
 });

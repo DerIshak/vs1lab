@@ -156,6 +156,7 @@ app.get('/discovery', function (req, res) {
 
 });
 
+
 /**
  * Setze Port und speichere in Express.
  */
