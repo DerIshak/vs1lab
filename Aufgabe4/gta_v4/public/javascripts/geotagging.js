@@ -219,9 +219,13 @@ $(document).ready(function () {
     document.getElementById("filtersubmit").addEventListener("click", function (event) {
         event.preventDefault();
         var ajax = new XMLHttpRequest();
-
+        ajax.onreadystatechange = function() {
+            if(ajax.readyState === 4){
+                updateSite(ajax.responseText);
+            }
+        }
         ajax.open("GET","/discovery?searchterm=" + document.getElementById("searchterm").value,true);
-    //    ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         ajax.send();
     } );
+
 });

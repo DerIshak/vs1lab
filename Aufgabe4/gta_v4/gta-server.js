@@ -146,14 +146,7 @@ app.post('/tagging', function (req, res) {
  */
 
 app.get('/discovery', function (req, res) {
-    //console.log(geoTagMod.searchGeoTagByName(req.body));
-    console.log(req.body);
-    res.render('gta', {
-        r_longitude: req.body.longitude,
-        r_latitude: req.body.latitude,
-        taglist: geoTagMod.searchGeoTagByName(req.body.searchterm)
-    });
-
+    res.send(geoTagMod.searchGeoTagByName(req.query.searchterm));
 });
 
 
