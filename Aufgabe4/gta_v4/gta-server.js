@@ -104,9 +104,9 @@ var geoTagMod = (function () {
         },
 
         updateGeoTag: function (id, newTag) {
-            var tag = geotags.filter(t => t.id === id)[0];
+            var tag = geotags.filter(t => t.id == id);
             if (tag) {
-                geotags = geotags.filter(t => t.id !== id)[0];
+                geotags = geotags.filter(t => t.id != id);
                 newTag.id = id;
                 geotags.push(newTag)
                 return newTag;
@@ -186,7 +186,7 @@ app.get("/geotags", function (req, res) {
 /**
  * Return GeoTag nach ID
  */
-app.get("/geotags/:id", function (req, res) {
+app.get("/geotags/id/:id", function (req, res) {
     console.log(parseInt(req.params.id));
     var ret = geoTagMod.getTagById(req.params.id);
 
@@ -198,9 +198,6 @@ app.get("/geotags/:id", function (req, res) {
     }
 });
 
-app.get("/test/:id", function (req, res) {
-    res.send(req.params.id);
-});
 
 /**
  *  Erstelle neuen GeoTag
@@ -222,31 +219,34 @@ app.post("/geotags", function (req, res) {
  */
 
 //Search by Name
-app.get("geotags/search/:query", function (req, res) {
+app.get("/geotags/search/:query", function (req, res) {
     res.json(geoTagMod.searchGeoTagByName(req.params.query));
+    //res.send(geoTagMod.searchGeoTagByName(req.params.query));
+    //res.send(req.params.query);
 });
 
-//Search by Coordinate
-app.get("geotags/search/:lat/:long/:radius", function (req, res) {
-    if (req.params.radius) {
-        res.json(geoTagMod.searchGeoTagbyCoordinate(
-            parseFloat(req.params.lat),
-            parseFloat(req.params.long),
-            parseFloat(req.params.radius)
-        ));
-    } else {
-        res.json(geoTagMod.searchGeoTagbyCoordinate(
-            parseFloat(req.params.lat),
-            parseFloat(req.params.long),
-            standardRadius
-        ));
-    }
-
+//Search by Coordinate with radius
+app.get("/geotags/search/coords/:lat/:long/:radius", function (req, res) {
+    res.json(geoTagMod.searchGeoTagbyCoordinate(
+        parseFloat(req.params.lat),
+        parseFloat(req.params.long),
+        parseFloat(req.params.radius)
+    ));
 });
+
+//Search by Coordinate without radius
+app.get("/geotags/search/coords/:lat/:long", function (req, res) {
+    res.json(geoTagMod.searchGeoTagbyCoordinate(
+        parseFloat(req.params.lat),
+        parseFloat(req.params.long),
+        standardRadius
+    ));
+});
+
 /**
  * Lösche GeoTag
  */
-app.delete("geotags/:id", function (req, res) {
+app.delete("/geotags/:id", function (req, res) {
     geoTagMod.deleteGeoTag(req.params.id);
     res.status(204).send();
 });
@@ -254,13 +254,13 @@ app.delete("geotags/:id", function (req, res) {
 /**
  * Ändere GeoTag
  */
-app.put("geotags/:id", function (req, res) {
+app.put("/geotags/:id", function (req, res) {
     try {
         var newTag = new GeoTag(
-            req.body.name,
             req.body.latitude,
             req.body.longitude,
-            red.body.hashtag
+            req.body.name,
+            req.body.tags
         );
         res.status(200).json(geoTagMod.updateGeoTag(req.params.id, newTag));
     } catch (e) {
