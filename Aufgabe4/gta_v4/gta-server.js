@@ -37,8 +37,8 @@ app.use(express.static(__dirname + "/public"));
  */
 
 class GeoTag {
-    constructor(lat, lon, name, tags,id) {
-        this.id=id;
+    constructor(lat, lon, name, tags, id) {
+        this.id = id;
         this.latitude = lat;
         this.longitude = lon;
         this.name = name;
@@ -79,19 +79,11 @@ var geoTagMod = (function () {
             return geotagresult;
         },
         addGeoTag: function (p_lat, p_lon, p_name, p_tags) {
-            let newgeotag = new GeoTag(p_lat, p_lon, p_name, p_tags,id++);
+            let newgeotag = new GeoTag(p_lat, p_lon, p_name, p_tags, id++);
             geotags.push(newgeotag);
         },
         deleteGeoTag: function (id) {
             geotags = geotags.filter(t => t.id != id);
-
-            /*            let pos;
-                        for (i = 0; i < geotags.length; i++) {
-                            if (geotags[i].name === p_name) {
-                                pos = i;
-                            }
-                        }
-                        geotags.splice(pos, 1);*/
         },
 
 
@@ -176,15 +168,14 @@ app.get('/discovery', function (req, res) {
 //-----------------------------------------------------------------------------
 
 /**
- * Return alle GeoTags
+ * Gebe alle GeoTags aus
  */
 app.get("/geotags", function (req, res) {
-    //res.send("Test");
     res.json(geoTagMod.getTags());
 });
 
 /**
- * Return GeoTag nach ID
+ * Suche GeoTag nach ID
  */
 app.get("/geotags/id/:id", function (req, res) {
     console.log(parseInt(req.params.id));
@@ -215,17 +206,15 @@ app.post("/geotags", function (req, res) {
 });
 
 /**
- *  Suche nach GeoTags
+ *  Suche nach GeoTags mit Name
  */
-
-//Search by Name
 app.get("/geotags/search/:query", function (req, res) {
     res.json(geoTagMod.searchGeoTagByName(req.params.query));
-    //res.send(geoTagMod.searchGeoTagByName(req.params.query));
-    //res.send(req.params.query);
 });
 
-//Search by Coordinate with radius
+/**
+ *  Suche nach GeoTags mit Koordinaten (+radius)
+ */
 app.get("/geotags/search/coords/:lat/:long/:radius", function (req, res) {
     res.json(geoTagMod.searchGeoTagbyCoordinate(
         parseFloat(req.params.lat),
@@ -234,7 +223,9 @@ app.get("/geotags/search/coords/:lat/:long/:radius", function (req, res) {
     ));
 });
 
-//Search by Coordinate without radius
+/**
+ *  Suche nach GeoTags mit Koordinaten
+ */
 app.get("/geotags/search/coords/:lat/:long", function (req, res) {
     res.json(geoTagMod.searchGeoTagbyCoordinate(
         parseFloat(req.params.lat),

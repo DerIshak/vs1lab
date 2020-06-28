@@ -15,7 +15,7 @@
     <h1>GeoTagApp</h1>
     <nav>
         <a href="#">About</a> | <a href="#">Help</a> | <a
-            href="/">Home</a>
+                href="/">Home</a>
     </nav>
 </header>
 
@@ -30,11 +30,15 @@
             <fieldset>
                 <legend>Enter new GeoTag</legend>
                 <label for="latitude">latitude</label>
-                <input type="text" id="latitude" name="latitude" placeholder="49.01379" <% if( r_latitude!== undefined)%> value="<%= r_latitude %>" required>
+                <input type="text" id="latitude" name="latitude" placeholder="49.01379"
+                        <% if( r_latitude !== undefined) %>
+                       value="<%= r_latitude %>" required>
 
 
                 <label for="longitude">longitude</label>
-                <input type="text" id="longitude" name="longitude" placeholder="8.390071" <% if( r_longitude!== undefined)%> value="<%= r_longitude %>" required>
+                <input type="text" id="longitude" name="longitude" placeholder="8.390071"
+                        <% if( r_longitude !== undefined) %>
+                       value="<%= r_longitude %>" required>
 
                 <label for="name">name</label>
                 <input type="text" id="name" name="name" placeholder="some name" maxlength="10"

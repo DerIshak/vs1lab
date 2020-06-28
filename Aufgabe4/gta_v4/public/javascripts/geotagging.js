@@ -114,7 +114,6 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
     };
 
 
-
     return { // Start öffentlicher Teil des Moduls ...
         // Public Member
         readme: "Dieses Objekt enthält 'öffentliche' Teile des Moduls.",
@@ -145,8 +144,6 @@ var gtaLocator = (function GtaLocator(geoLocationApi) {
         }
 
 
-
-
     }; // ... Ende öffentlicher Teil
 })(GEOLOCATIONAPI);
 
@@ -165,14 +162,13 @@ class GeoTag {
     }
 }
 
-function updateSite(resText){
+function updateSite(resText) {
     var antwort = JSON.parse(resText);
     document.getElementById("results").innerHTML = "";
-    for(var i = 0;i<antwort.length;i++){
+    for (var i = 0; i < antwort.length; i++) {
         var ulElement = document.getElementById("results");
         var listElement = document.createElement("li");
         var strInhalt = antwort[i].name + " ( " + antwort[i].latitude + " , " + antwort[i].longitude + ") " + antwort[i].tags;
-
 
         if (antwort[i].tags === undefined) strInhalt = antwort[i].name + " ( " + antwort[i].latitude + " , " + antwort[i].longitude + ") ";
 
@@ -181,7 +177,7 @@ function updateSite(resText){
         listElement.appendChild(listInhalt);
         ulElement.appendChild(listElement);
     }
-    document.getElementById("result-img").setAttribute("data-tags",resText);
+    document.getElementById("result-img").setAttribute("data-tags", resText);
     document.getElementById("latitude").value = antwort[0].latitude;
     document.getElementById("longitude").value = antwort[0].longitude;
     gtaLocator.updateLocation();
@@ -189,33 +185,38 @@ function updateSite(resText){
 
 $(document).ready(function () {
     gtaLocator.updateLocation();
-    //console.log(document.getElementById("result-img").dataset.tags);
-    document.getElementById("tagsubmit").addEventListener("click",function (event) {
+
+    /*
+     *  Event: Submit-Button wird gedrückt
+     */
+    document.getElementById("tagsubmit").addEventListener("click", function (event) {
         event.preventDefault();
         var ajax = new XMLHttpRequest();
-        var gtag = new GeoTag(document.getElementById("latitude").value,document.getElementById("longitude").value,
-            document.getElementById("name").value,document.getElementById("hashtag").value);
-        ajax.onreadystatechange = function() {
-            if(ajax.readyState === 4){
+        var gtag = new GeoTag(document.getElementById("latitude").value, document.getElementById("longitude").value,
+            document.getElementById("name").value, document.getElementById("hashtag").value);
+        ajax.onreadystatechange = function () {
+            if (ajax.readyState === 4) {
                 updateSite(ajax.responseText);
             }
         }
-        ajax.open("POST","/tagging",true);
+        ajax.open("POST", "/tagging", true);
         ajax.setRequestHeader("Content-Type", "application/json");
-        //console.log(JSON.stringify(gtag));
         ajax.send(JSON.stringify(gtag));
-    } );
+    });
 
+    /*
+     *  Event: Search-Button wird gedrückt
+     */
     document.getElementById("filtersubmit").addEventListener("click", function (event) {
         event.preventDefault();
         var ajax = new XMLHttpRequest();
-        ajax.onreadystatechange = function() {
-            if(ajax.readyState === 4){
+        ajax.onreadystatechange = function () {
+            if (ajax.readyState === 4) {
                 updateSite(ajax.responseText);
             }
         }
-        ajax.open("GET","/discovery?searchterm=" + document.getElementById("searchterm").value,true);
+        ajax.open("GET", "/discovery?searchterm=" + document.getElementById("searchterm").value, true);
         ajax.send();
-    } );
+    });
 
 });
