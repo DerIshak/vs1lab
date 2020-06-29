@@ -142,9 +142,8 @@ app.get('/', function (req, res) {
 
 
 app.post('/tagging', function (req, res) {
-    console.log(req.body);
     geoTagMod.addGeoTag(req.body.latitude, req.body.longitude, req.body.name, req.body.hashtag);
-    res.send(geoTagMod.searchGeoTagbyCoordinate(req.body.latitude, req.body.longitude, 0.4));
+    res.send(geoTagMod.searchGeoTagbyCoordinate(req.body.latitude, req.body.longitude, standardRadius));
 });
 
 
